@@ -67,11 +67,14 @@ export const Showcase: React.FC = () => {
     return (
       <section className="showcase-static" aria-label="Inventory showcase">
         <div
-          className="showcase-static__plate"
+          className="showcase-static__frame"
           style={{ backgroundImage: `url(${asset("02.jpg")})` }}
+          role="img"
+          aria-label="Pre-owned vehicle against the New York skyline"
         />
         <div className="showcase-static__caption">
-          <span className="meta" style={{ color: "var(--red)" }}>
+          <span className="chip">
+            <span className="chip__dot" />
             Plate 01
           </span>
           <h2>Hand-picked inventory</h2>

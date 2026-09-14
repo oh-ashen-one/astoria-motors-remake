@@ -1,9 +1,10 @@
 import React from "react";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
-import { Statement } from "./components/Statement";
+import { ValueStrip } from "./components/ValueStrip";
 import { Showcase } from "./components/Showcase";
-import { Lot } from "./components/Lot";
+import { Steps } from "./components/Steps";
+import { About } from "./components/About";
 import { Financing } from "./components/Financing";
 import { Visit } from "./components/Visit";
 import { Footer } from "./components/Footer";
@@ -14,9 +15,10 @@ const App: React.FC = () => {
       <Header />
       <main>
         <Hero />
-        <Statement />
+        <ValueStrip />
         <Showcase />
-        <Lot />
+        <Steps />
+        <About />
         <Financing />
         <Visit />
       </main>

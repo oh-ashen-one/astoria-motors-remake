@@ -4,7 +4,7 @@ import { asset, CONTACT, LINKS } from "../data";
 const NAV = [
   { label: "Inventory", href: LINKS.inventory, external: true },
   { label: "Financing", href: "#financing", external: false },
-  { label: "The lot", href: "#about", external: false },
+  { label: "About", href: "#about", external: false },
   { label: "Visit", href: "#visit", external: false },
 ];
 
@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -21,8 +21,8 @@ export const Header: React.FC = () => {
 
   return (
     <header className={`site-header ${scrolled ? "site-header--scrolled" : ""}`}>
-      <a className="site-header__brand" href="#top" onClick={() => setOpen(false)}>
-        <img src={asset("logo.png")} alt="Astoria Motors, LLC" className="site-header__logo" />
+      <a className="site-header__logo" href="#top" onClick={() => setOpen(false)} aria-label="Astoria Motors, LLC — home">
+        <img src={asset("logo-transparent.png")} alt="Astoria Motors, LLC" />
       </a>
 
       <nav className={`site-nav ${open ? "site-nav--open" : ""}`}>
@@ -39,6 +39,15 @@ export const Header: React.FC = () => {
         ))}
         <a className="site-nav__phone" href={CONTACT.salesTel}>
           {CONTACT.salesPhone}
+        </a>
+        <a
+          className="btn btn--accent site-nav__cta"
+          href={LINKS.inventory}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setOpen(false)}
+        >
+          Browse inventory
         </a>
       </nav>
 

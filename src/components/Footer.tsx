@@ -7,8 +7,10 @@ export const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer__inner">
-        <div className="footer__brand">
-          <img src={asset("logo.png")} alt="Astoria Motors, LLC" className="footer__logo" />
+        <div>
+          <span className="footer__logo">
+            <img src={asset("logo-transparent.png")} alt="Astoria Motors, LLC" />
+          </span>
           <p className="footer__addr">
             {CONTACT.address}
             <br />

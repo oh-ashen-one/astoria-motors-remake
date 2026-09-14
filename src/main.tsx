@@ -1,10 +1,7 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./site.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// NOTE: no StrictMode — its dev double-mount freezes @remotion/player's
+// autoplay loop (hero stuck at frame 0). See Hero.tsx for the play() guard.
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);

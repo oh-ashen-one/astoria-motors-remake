@@ -47,11 +47,12 @@ const run = async () => {
       const trackTop = r.top + window.scrollY;
       const scrollable = r.height - window.innerHeight;
       return {
-        statement: Math.max(0, top(".statement") - window.innerHeight * 0.25),
+        values: Math.max(0, top(".values") - window.innerHeight * 0.5),
+        steps: top(".steps") - window.innerHeight * 0.15,
         s25: trackTop + scrollable * 0.17,
         s55: trackTop + scrollable * 0.42,
         s85: trackTop + scrollable * 0.78,
-        lot: top(".lot") - window.innerHeight * 0.15,
+        about: top(".about") - window.innerHeight * 0.15,
         financing: top(".financing") - window.innerHeight * 0.2,
         visit: top(".visit") - window.innerHeight * 0.1,
         footer: document.body.scrollHeight,
@@ -59,11 +60,12 @@ const run = async () => {
     });
 
     await shootPage(page, cfg.name, [
-      ["01-statement", Math.round(anchors.statement)],
+      ["01-values", Math.round(anchors.values)],
       ["02-showcase25", Math.round(anchors.s25)],
       ["03-showcase55", Math.round(anchors.s55)],
       ["04-showcase85", Math.round(anchors.s85)],
-      ["05-lot", Math.round(anchors.lot)],
+      ["05-steps", Math.round(anchors.steps)],
+      ["05b-about", Math.round(anchors.about)],
       ["06-financing", Math.round(anchors.financing)],
       ["07-visit", Math.round(anchors.visit)],
       ["08-footer", Math.round(anchors.footer)],

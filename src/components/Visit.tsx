@@ -15,40 +15,44 @@ export const Visit: React.FC = () => {
   };
 
   return (
-    <section className="visit" id="visit">
+    <section className="section visit" id="visit">
+      <div className="section__head">
+        <h2>Visit the lot</h2>
+        <p>Minutes from Manhattan — stop in, call, or text us anytime.</p>
+      </div>
       <div className="visit__grid">
-        <div>
-          <h2>Visit the lot</h2>
-          <p className="visit__address">{CONTACT.address}</p>
-          <div className="visit__actions">
-            <a className="btn btn--red" href={LINKS.directions} target="_blank" rel="noopener noreferrer">
-              Get driving directions
-            </a>
-            <a className="btn btn--line" href={CONTACT.salesTel}>
-              Call {CONTACT.salesPhone}
-            </a>
+        <div className="visit__cards">
+          <div className="vcard">
+            <h3>Astoria Motors, LLC</h3>
+            <p className="vcard__address">{CONTACT.address}</p>
+            <div className="vcard__actions">
+              <a className="btn btn--accent" href={LINKS.directions} target="_blank" rel="noopener noreferrer">
+                Get driving directions
+              </a>
+            </div>
           </div>
 
-          <div className="directory">
-            <div className="directory__row">
-              <span className="directory__label">Sales</span>
-              <a className="directory__value" href={CONTACT.salesTel}>
+          <div className="vcard">
+            <h3>Talk to us</h3>
+            <div className="drow">
+              <span className="drow__label">Sales</span>
+              <a className="drow__value" href={CONTACT.salesTel}>
                 {CONTACT.salesPhone}
               </a>
             </div>
-            <div className="directory__row">
-              <span className="directory__label">Call or text</span>
-              <a className="directory__value" href={CONTACT.callOrTextTel}>
+            <div className="drow">
+              <span className="drow__label">Call or text</span>
+              <a className="drow__value" href={CONTACT.callOrTextTel}>
                 {CONTACT.callOrText}
               </a>
             </div>
-            <div className="directory__row">
-              <span className="directory__label">Fax</span>
-              <span className="directory__value">{CONTACT.fax}</span>
+            <div className="drow">
+              <span className="drow__label">Fax</span>
+              <span className="drow__value">{CONTACT.fax}</span>
             </div>
           </div>
 
-          <div className="hours">
+          <div className="vcard">
             <h3>Showroom hours</h3>
             <div className="hours__days">
               {DAYS.map((d) => (
@@ -61,30 +65,32 @@ export const Visit: React.FC = () => {
             </p>
           </div>
 
-          <form className="message" onSubmit={onSubmit}>
+          <div className="vcard">
             <h3>Send us a message</h3>
-            <input
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              aria-label="Your name"
-            />
-            <textarea
-              placeholder="What are you looking for?"
-              rows={3}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              aria-label="Your message"
-            />
-            <button className="btn btn--line" type="submit">
-              Send by email
-            </button>
-            <p className="message__note">
-              Prefer to talk? Call or text{" "}
-              <a href={CONTACT.callOrTextTel}>{CONTACT.callOrText}</a>.
-            </p>
-          </form>
+            <form className="message" onSubmit={onSubmit}>
+              <input
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                aria-label="Your name"
+              />
+              <textarea
+                placeholder="What are you looking for?"
+                rows={3}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                aria-label="Your message"
+              />
+              <button className="btn btn--outline" type="submit">
+                Send by email
+              </button>
+              <p className="message__note">
+                Prefer to talk? Call or text{" "}
+                <a href={CONTACT.callOrTextTel}>{CONTACT.callOrText}</a>.
+              </p>
+            </form>
+          </div>
         </div>
 
         <div className="visit__map">
