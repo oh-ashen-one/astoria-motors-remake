@@ -1,6 +1,6 @@
 # Astoria Motors, LLC — Website Remake
 
-A modern, cinematic single-page remake of the Astoria Motors, LLC dealership website (Long Island City, NY), built with Vite + React + TypeScript and [Remotion](https://remotion.dev) (`@remotion/player`) for the animated hero and the scroll-driven showcase.
+A cinematic single-page remake of the Astoria Motors, LLC dealership website (Long Island City, NY), designed like a collector-car auction catalog crossed with a film title sequence: true-black letterboxed cinemascope plates, Fraunces display serif, and two Remotion compositions — an orchestrated hero title sequence and a scroll-driven "plate" showcase.
 
 **Live site:** https://oh-ashen-one.github.io/astoria-motors-remake/
 

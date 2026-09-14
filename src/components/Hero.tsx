@@ -1,14 +1,29 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Player } from "@remotion/player";
 import { HeroComposition, HERO_DURATION, HERO_FPS } from "../remotion/HeroComposition";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { asset, LINKS } from "../data";
 
+function useIsTall() {
+  const [tall, setTall] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 760
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 759px)");
+    const onChange = () => setTall(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return tall;
+}
+
 export const Hero: React.FC = () => {
   const reduced = usePrefersReducedMotion();
+  const tall = useIsTall();
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  // Parallax fade-away on scroll
+  // quiet fade as the hero scrolls away — motion answering the scroll
   useEffect(() => {
     if (reduced) return;
     let raf = 0;
@@ -17,11 +32,9 @@ export const Hero: React.FC = () => {
       raf = requestAnimationFrame(() => {
         const el = wrapRef.current;
         if (!el) return;
-        const y = window.scrollY;
-        const h = window.innerHeight;
-        const p = Math.min(1, y / h);
-        el.style.transform = `translateY(${y * 0.35}px)`;
-        el.style.opacity = String(1 - p * 0.9);
+        const p = Math.min(1, window.scrollY / window.innerHeight);
+        el.style.transform = `translateY(${window.scrollY * 0.28}px)`;
+        el.style.opacity = String(1 - p * 0.85);
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -32,20 +45,44 @@ export const Hero: React.FC = () => {
   }, [reduced]);
 
   return (
-    <section className="hero" id="top">
+    <section className={`hero ${reduced ? "hero--static" : ""}`} id="top">
       <div className="hero__media" ref={wrapRef}>
         {reduced ? (
-          <div
-            className="hero__static"
-            style={{ backgroundImage: `url(${asset("01.jpg")})` }}
-          />
+          <div className="hero-static">
+            <div className="hero-static__top">
+              <span className="meta">Welcome to Astoria Motors, LLC</span>
+              <span className="meta">Long Island City, New York</span>
+            </div>
+            <div
+              className="hero-static__plate"
+              style={{ backgroundImage: `url(${asset("01.jpg")})` }}
+            />
+            <div className="hero-static__body">
+              <h1>
+                We sell quality
+                <br />
+                pre-owned vehicles.
+              </h1>
+              <div className="hero-static__rule" />
+              <div className="hero-static__ctas">
+                <a className="btn btn--red" href={LINKS.inventory} target="_blank" rel="noopener noreferrer">
+                  Browse live inventory
+                </a>
+                <a className="btn btn--line" href={LINKS.creditApp} target="_blank" rel="noopener noreferrer">
+                  Apply for financing
+                </a>
+              </div>
+            </div>
+          </div>
         ) : (
           <Player
+            key={tall ? "tall" : "wide"}
             component={HeroComposition}
+            inputProps={{ tall }}
             durationInFrames={HERO_DURATION}
             fps={HERO_FPS}
-            compositionWidth={1920}
-            compositionHeight={1080}
+            compositionWidth={tall ? 1080 : 1920}
+            compositionHeight={tall ? 1440 : 1080}
             autoPlay
             loop
             controls={false}
@@ -53,32 +90,19 @@ export const Hero: React.FC = () => {
             style={{ width: "100%", height: "100%" }}
           />
         )}
-        {reduced && (
-          <div className="hero__static-overlay">
-            <img src={asset("logo.png")} alt="Astoria Motors, LLC" className="hero__static-logo" />
-            <h1 className="hero__static-headline">
-              We Sell Quality
-              <br />
-              Pre-Owned Vehicles
-            </h1>
-            <p className="hero__static-sub">Welcome to Astoria Motors, LLC</p>
-          </div>
-        )}
       </div>
 
-      {/* Real HTML CTAs layered over the player */}
-      <div className="hero__ctas">
-        <a className="btn btn--red btn--lg" href={LINKS.inventory} target="_blank" rel="noopener noreferrer">
-          View Inventory
-        </a>
-        <a className="btn btn--ghost btn--lg" href={LINKS.creditApp} target="_blank" rel="noopener noreferrer">
-          Get Financed
-        </a>
-      </div>
-
-      <a className="hero__scroll-hint" href="#stats" aria-label="Scroll down">
-        <span className="hero__chevron" />
-      </a>
+      {/* real HTML CTAs layered under the headline */}
+      {!reduced && (
+        <div className="hero__ctas">
+          <a className="btn btn--red" href={LINKS.inventory} target="_blank" rel="noopener noreferrer">
+            Browse live inventory
+          </a>
+          <a className="btn btn--line" href={LINKS.creditApp} target="_blank" rel="noopener noreferrer">
+            Apply for financing
+          </a>
+        </div>
+      )}
     </section>
   );
 };

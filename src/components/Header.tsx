@@ -4,8 +4,8 @@ import { asset, CONTACT, LINKS } from "../data";
 const NAV = [
   { label: "Inventory", href: LINKS.inventory, external: true },
   { label: "Financing", href: "#financing", external: false },
-  { label: "About", href: "#about", external: false },
-  { label: "Visit Us", href: "#visit", external: false },
+  { label: "The lot", href: "#about", external: false },
+  { label: "Visit", href: "#visit", external: false },
 ];
 
 export const Header: React.FC = () => {
@@ -37,7 +37,7 @@ export const Header: React.FC = () => {
             {item.label}
           </a>
         ))}
-        <a className="btn btn--red site-nav__cta" href={CONTACT.salesTel}>
+        <a className="site-nav__phone" href={CONTACT.salesTel}>
           {CONTACT.salesPhone}
         </a>
       </nav>

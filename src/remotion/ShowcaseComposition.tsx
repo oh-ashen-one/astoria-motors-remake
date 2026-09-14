@@ -9,161 +9,229 @@ import {
 import { asset } from "../data";
 
 export const SHOWCASE_FPS = 30;
-export const SHOWCASE_DURATION = 300; // 10s of frames, driven by scroll
+export const SHOWCASE_DURATION = 320; // 4 plates × 80 frames, scroll-driven
 
 interface Scene {
   img: string;
+  plate: string;
   caption: string;
-  sub: string;
-  from: number;
-  to: number;
-  pan: "in" | "out" | "left" | "right";
+  detail: string;
 }
 
 const SCENES: Scene[] = [
-  { img: "02.jpg", caption: "Hand-Picked Inventory", sub: "Every vehicle chosen for quality", from: 0, to: 90, pan: "in" },
-  { img: "slider-shop1.jpg", caption: "Inspected & Warranty-Ready", sub: "Extended service contracts available", from: 90, to: 180, pan: "right" },
-  { img: "05.jpg", caption: "All Makes & Models", sub: "Cars • SUVs • Minivans • Trucks", from: 180, to: 270, pan: "out" },
-  { img: "slider-shop2.jpg", caption: "Visit Us in Long Island City", sub: "32-72 Gale Ave — minutes from Manhattan", from: 270, to: 300, pan: "left" },
+  {
+    img: "02.jpg",
+    plate: "Plate 01",
+    caption: "Hand-picked inventory",
+    detail: "Cars, SUVs, minivans and trucks, chosen for condition.",
+  },
+  {
+    img: "slider-shop1.jpg",
+    plate: "Plate 02",
+    caption: "Inspected and warranty-ready",
+    detail: "Many vehicles eligible for extended service contracts.",
+  },
+  {
+    img: "05.jpg",
+    plate: "Plate 03",
+    caption: "All makes and models",
+    detail: "Quality pre-owned vehicles across the range.",
+  },
+  {
+    img: "slider-shop2.jpg",
+    plate: "Plate 04",
+    caption: "Minutes from Manhattan",
+    detail: "32-72 Gale Ave, Long Island City — stop by the lot.",
+  },
 ];
 
-const FADE = 16;
+const PER = SHOWCASE_DURATION / SCENES.length; // 80
+const FADE = 14;
 
-const SceneView: React.FC<{ scene: Scene; local: number }> = ({ scene, local }) => {
-  const len = scene.to - scene.from;
-  const e = Easing.inOut(Easing.quad);
-  let scale = 1.12;
-  let tx = 0;
-  if (scene.pan === "in") scale = interpolate(local, [0, len], [1.0, 1.18], { easing: e });
-  if (scene.pan === "out") scale = interpolate(local, [0, len], [1.18, 1.0], { easing: e });
-  if (scene.pan === "left") {
-    scale = 1.14;
-    tx = interpolate(local, [0, len], [3, -3], { easing: e });
-  }
-  if (scene.pan === "right") {
-    scale = 1.14;
-    tx = interpolate(local, [0, len], [-3, 3], { easing: e });
-  }
+interface Layout {
+  plateTop: number;
+  plateH: number;
+  margin: number;
+  labelSize: number;
+  hSize: number;
+  dSize: number;
+  capTop: number;
+  barBottom: number;
+  counterSize: number;
+}
 
-  const captionIn = interpolate(local, [6, 26], [0, 1], {
+const DESKTOP: Layout = {
+  plateTop: 120,
+  plateH: 670,
+  margin: 110,
+  labelSize: 24,
+  hSize: 64,
+  dSize: 27,
+  capTop: 838,
+  barBottom: 28,
+  counterSize: 24,
+};
+
+const TALL: Layout = {
+  plateTop: 150,
+  plateH: 520,
+  margin: 64,
+  labelSize: 22,
+  hSize: 52,
+  dSize: 24,
+  capTop: 720,
+  barBottom: 30,
+  counterSize: 42,
+};
+
+const SceneView: React.FC<{ scene: Scene; local: number; L: Layout }> = ({
+  scene,
+  local,
+  L,
+}) => {
+  const zoom = interpolate(local, [0, PER], [1.0, 1.08], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const capIn = interpolate(local, [4, 22], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
-  const captionOut = interpolate(local, [len - 18, len - 4], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const cap = Math.min(captionIn, captionOut);
 
   return (
-    <AbsoluteFill>
-      <Img
-        src={asset(scene.img)}
+    <>
+      <div
         style={{
+          position: "absolute",
+          top: L.plateTop,
+          left: 0,
           width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          transform: `scale(${scale}) translateX(${tx}%)`,
+          height: L.plateH,
+          overflow: "hidden",
         }}
-      />
-      <AbsoluteFill
+      >
+        <Img
+          src={asset(scene.img)}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: `scale(${zoom})`,
+          }}
+        />
+      </div>
+      <div
         style={{
-          background:
-            "linear-gradient(90deg, rgba(10,10,12,0.82) 0%, rgba(10,10,12,0.35) 55%, rgba(10,10,12,0.15) 100%)",
+          position: "absolute",
+          top: L.capTop,
+          left: L.margin,
+          right: L.margin,
+          opacity: capIn,
+          transform: `translateY(${(1 - capIn) * 26}px)`,
         }}
-      />
-      <AbsoluteFill style={{ justifyContent: "center", paddingLeft: 110 }}>
+      >
         <div
           style={{
-            opacity: cap,
-            transform: `translateX(${(1 - cap) * -60}px)`,
-            maxWidth: 720,
+            fontFamily: "'Barlow', sans-serif",
+            fontWeight: 500,
+            fontSize: L.labelSize,
+            color: "#e10600",
+            fontVariantNumeric: "tabular-nums",
           }}
         >
-          <div
-            style={{
-              width: 64,
-              height: 5,
-              background: "#e10600",
-              boxShadow: "0 0 18px rgba(225,6,0,0.7)",
-              marginBottom: 26,
-              transform: `scaleX(${cap})`,
-              transformOrigin: "left",
-            }}
-          />
-          <div
-            style={{
-              fontFamily: "'Oswald', 'Arial Narrow', sans-serif",
-              fontWeight: 700,
-              fontSize: 76,
-              lineHeight: 1.04,
-              letterSpacing: "0.03em",
-              color: "#f5f5f7",
-              textShadow: "0 4px 26px rgba(0,0,0,0.7)",
-              textTransform: "uppercase",
-            }}
-          >
-            {scene.caption}
-          </div>
-          <div
-            style={{
-              marginTop: 18,
-              fontFamily: "'Archivo', sans-serif",
-              fontWeight: 500,
-              fontSize: 26,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "#c8c8d0",
-            }}
-          >
-            {scene.sub}
-          </div>
+          {scene.plate}
         </div>
-      </AbsoluteFill>
-    </AbsoluteFill>
+        <div
+          style={{
+            fontFamily: "'Fraunces', Georgia, serif",
+            fontVariationSettings: "'opsz' 144",
+            fontWeight: 560,
+            fontSize: L.hSize,
+            letterSpacing: "-0.015em",
+            color: "#f2f2f4",
+            lineHeight: 1.08,
+            marginTop: 10,
+          }}
+        >
+          {scene.caption}
+        </div>
+        <div
+          style={{
+            fontFamily: "'Barlow', sans-serif",
+            fontSize: L.dSize,
+            color: "#83868c",
+            marginTop: 12,
+            maxWidth: "64ch",
+          }}
+        >
+          {scene.detail}
+        </div>
+      </div>
+    </>
   );
 };
 
-/** Scroll-driven cinematic sequence — the page seeks frames directly. */
-export const ShowcaseComposition: React.FC = () => {
+/** Scroll-driven catalog sequence — the page seeks frames directly. */
+export const ShowcaseComposition: React.FC<{ tall?: boolean }> = ({ tall }) => {
   const frame = useCurrentFrame();
+  const L = tall ? TALL : DESKTOP;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0a0a0c" }}>
-      {SCENES.map((scene) => {
-        if (frame < scene.from - FADE || frame > scene.to + FADE) return null;
-        const local = Math.max(0, frame - scene.from);
+    <AbsoluteFill style={{ backgroundColor: "#000000" }}>
+      {SCENES.map((scene, i) => {
+        const start = i * PER;
+        const end = start + PER;
+        if (frame < start - FADE || frame > end + FADE) return null;
         const opacity = interpolate(
           frame,
-          [scene.from - FADE, scene.from, scene.to, scene.to + FADE],
+          [start - FADE, start, end - FADE / 2, end],
           [0, 1, 1, 0],
           { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
         );
         return (
-          <AbsoluteFill key={scene.caption} style={{ opacity }}>
-            <SceneView scene={scene} local={local} />
+          <AbsoluteFill key={scene.plate} style={{ opacity }}>
+            <SceneView scene={scene} local={Math.max(0, frame - start)} L={L} />
           </AbsoluteFill>
         );
       })}
 
-      {/* Progress hint bar */}
+      {/* plate counter */}
       <div
         style={{
           position: "absolute",
-          bottom: 40,
-          left: 110,
-          right: 110,
-          height: 3,
-          background: "rgba(255,255,255,0.14)",
+          right: L.margin,
+          bottom: L.barBottom + 10,
+          fontFamily: "'Fraunces', Georgia, serif",
+          fontVariationSettings: "'opsz' 144",
+          fontSize: L.counterSize,
+          color: "#83868c",
+          fontVariantNumeric: "tabular-nums",
+        }}
+      >
+        <span style={{ color: "#d9dbdf" }}>
+          {String(Math.min(SCENES.length, Math.floor(frame / PER) + 1)).padStart(2, "0")}
+        </span>
+        {" / "}
+        {String(SCENES.length).padStart(2, "0")}
+      </div>
+
+      {/* red progress hairline */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: L.barBottom,
+          left: L.margin,
+          right: L.margin,
+          height: 2,
+          background: "rgba(217,219,223,0.14)",
         }}
       >
         <div
           style={{
             height: "100%",
-            width: `${(frame / SHOWCASE_DURATION) * 100}%`,
+            width: `${(frame / (SHOWCASE_DURATION - 1)) * 100}%`,
             background: "#e10600",
-            boxShadow: "0 0 12px rgba(225,6,0,0.8)",
           }}
         />
       </div>

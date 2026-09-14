@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Player, PlayerRef } from "@remotion/player";
 import {
   ShowcaseComposition,
@@ -9,14 +9,24 @@ import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { asset } from "../data";
 
 /**
- * Scrollytelling: a 300vh track with a sticky Remotion Player.
+ * Scrollytelling: a tall track with a sticky Remotion Player.
  * Scroll progress maps to composition frames via playerRef.seekTo(),
- * rAF-throttled so we seek at most once per frame.
+ * rAF-throttled so we seek at most once per paint.
  */
 export const Showcase: React.FC = () => {
   const reduced = usePrefersReducedMotion();
+  const [tall, setTall] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 760
+  );
   const trackRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<PlayerRef>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 759px)");
+    const onChange = () => setTall(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (reduced) return;
@@ -55,15 +65,20 @@ export const Showcase: React.FC = () => {
 
   if (reduced) {
     return (
-      <section className="showcase showcase--static">
+      <section className="showcase-static" aria-label="Inventory showcase">
         <div
-          className="showcase__static-slide"
+          className="showcase-static__plate"
           style={{ backgroundImage: `url(${asset("02.jpg")})` }}
-        >
-          <div className="showcase__static-caption">
-            <h2>Hand-Picked Inventory</h2>
-            <p>Inspected &amp; warranty-ready — all makes &amp; models.</p>
-          </div>
+        />
+        <div className="showcase-static__caption">
+          <span className="meta" style={{ color: "var(--red)" }}>
+            Plate 01
+          </span>
+          <h2>Hand-picked inventory</h2>
+          <p>
+            Cars, SUVs, minivans and trucks, chosen for condition — inspected,
+            and many eligible for extended service contracts.
+          </p>
         </div>
       </section>
     );
@@ -73,12 +88,14 @@ export const Showcase: React.FC = () => {
     <section className="showcase" ref={trackRef} aria-label="Inventory showcase">
       <div className="showcase__sticky">
         <Player
+          key={tall ? "tall" : "wide"}
           ref={playerRef}
           component={ShowcaseComposition}
+          inputProps={{ tall }}
           durationInFrames={SHOWCASE_DURATION}
           fps={SHOWCASE_FPS}
-          compositionWidth={1920}
-          compositionHeight={1080}
+          compositionWidth={tall ? 1080 : 1920}
+          compositionHeight={tall ? 1440 : 1080}
           controls={false}
           clickToPlay={false}
           style={{ width: "100%", height: "100%" }}

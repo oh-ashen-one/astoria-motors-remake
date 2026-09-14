@@ -1,12 +1,11 @@
 import React from "react";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
-import { Stats } from "./components/Stats";
-import { ShoppingTools } from "./components/ShoppingTools";
+import { Statement } from "./components/Statement";
 import { Showcase } from "./components/Showcase";
-import { About } from "./components/About";
+import { Lot } from "./components/Lot";
 import { Financing } from "./components/Financing";
-import { Contact } from "./components/Contact";
+import { Visit } from "./components/Visit";
 import { Footer } from "./components/Footer";
 
 const App: React.FC = () => {
@@ -15,12 +14,11 @@ const App: React.FC = () => {
       <Header />
       <main>
         <Hero />
-        <Stats />
-        <ShoppingTools />
+        <Statement />
         <Showcase />
-        <About />
+        <Lot />
         <Financing />
-        <Contact />
+        <Visit />
       </main>
       <Footer />
     </>
