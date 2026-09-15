@@ -179,7 +179,7 @@ const SceneView: React.FC<{ scene: Scene; local: number; L: Layout }> = ({
         >
           {scene.caption}
         </div>
-        <div style={{ fontSize: L.dSize, color: MUTED, marginTop: 8 }}>
+        <div className="scomp-detail" style={{ fontSize: L.dSize, color: MUTED, marginTop: 8 }}>
           {scene.detail}
         </div>
       </div>

@@ -65,7 +65,7 @@ export const Visit: React.FC = () => {
             </p>
           </div>
 
-          <div className="vcard">
+          <div className="vcard vcard--form">
             <h3>Send us a message</h3>
             <form className="message" onSubmit={onSubmit}>
               <input

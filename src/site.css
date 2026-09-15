@@ -995,6 +995,48 @@ a.drow__value:hover {
   }
 }
 
+@media (max-width: 640px) {
+  /* mobile-only text-density reduction — desktop is untouched */
+
+  /* hero: drop welcome sub-line + float-card descriptions */
+  .hcomp-sub,
+  .fcard-desc {
+    display: none;
+  }
+
+  /* value strip: icon + title only */
+  .value__desc {
+    display: none;
+  }
+
+  /* showcase: plate title + counter only */
+  .scomp-detail {
+    display: none;
+  }
+
+  /* steps: no section subtitle, no card body copy */
+  .steps .section__head p,
+  .step-card__copy {
+    display: none;
+  }
+
+  /* about: towns are in the paragraph already */
+  .about__towns {
+    display: none;
+  }
+
+  /* financing: the headline says it */
+  .financing__copy {
+    display: none;
+  }
+
+  /* visit: no subtitle, no secondary mailto form */
+  .visit .section__head p,
+  .vcard--form {
+    display: none;
+  }
+}
+
 @media (max-width: 430px) {
   .values__row {
     grid-template-columns: 1fr;

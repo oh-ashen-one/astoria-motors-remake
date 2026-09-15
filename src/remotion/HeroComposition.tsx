@@ -130,7 +130,7 @@ const FloatCard: React.FC<{
       <div style={{ fontWeight: 800, fontSize: 22, color: INK, letterSpacing: "-0.01em" }}>
         {title}
       </div>
-      <div style={{ fontSize: 16, color: MUTED }}>{desc}</div>
+      <div className="fcard-desc" style={{ fontSize: 16, color: MUTED }}>{desc}</div>
     </div>
   </div>
 );
@@ -335,6 +335,7 @@ export const HeroComposition: React.FC<{ tall?: boolean }> = ({ tall }) => {
       </div>
 
       <div
+        className="hcomp-sub"
         style={{
           position: "absolute",
           left: L.margin,

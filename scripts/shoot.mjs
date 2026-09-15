@@ -18,10 +18,14 @@ async function shootPage(page, name, positions) {
 const run = async () => {
   const browser = await chromium.launch();
 
-  for (const cfg of [
-    { name: "desktop", width: 1440, height: 900 },
-    { name: "mobile", width: 390, height: 844 },
-  ]) {
+  const viewports = (process.env.WIDTHS || "1440x900,390x844")
+    .split(",")
+    .map((s) => {
+      const [w, h] = s.split("x").map(Number);
+      return { name: w >= 1000 ? "desktop" : `m${w}`, width: w, height: h };
+    });
+
+  for (const cfg of viewports) {
     const page = await browser.newPage({
       viewport: { width: cfg.width, height: cfg.height },
       deviceScaleFactor: 1,
